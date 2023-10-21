@@ -94,6 +94,7 @@ app.post('/payment/callback', (req, res) => {
     // POSTER_API_KEY
 
     const orderParams = {
+        spot_id: 1,
         phone: JSON.parse(info).phone,
         products: JSON.parse(info).products,
         first_name: JSON.parse(info).name,
