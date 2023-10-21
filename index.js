@@ -23,6 +23,10 @@ app.get('/', (req, res) => {
     res.send(process.env.LIQPAY_PUBLIC_KEY);
 })
 
+app.post('/result', (req, res) => {
+    res.send('result');
+})
+
 app.post('/payment', (req, res) => {
     const {amount, currency, description} = req.body;
 
@@ -33,7 +37,8 @@ app.post('/payment', (req, res) => {
         description: description,
         public_key: process.env.LIQPAY_PUBLIC_KEY,
         private_key: process.env.LIQPAY_PRIVATE_KEY,
-        server_url: 'http://localhost:6789/payment/callback',
+        server_url: 'https://poster-shop-server.onrender.com/payment/callback',
+        result_url: 'https://poster-shop-server.onrender.com/result'
     }
 
     const data = Buffer.from(JSON.stringify(params)).toString('base64');
@@ -58,7 +63,19 @@ app.post('/payment', (req, res) => {
 })
 
 app.post('/payment/callback', (req, res) => {
-    console.log('OK', req, res);
+    const encodedData = req.body.data;
+    const signature = req.body.signature;
+    const origSig = str_to_sign(
+        process.env.LIQPAY_PRIVATE_KEY +
+        encodedData +
+        process.env.LIQPAY_PRIVATE_KEY,
+    );
+
+    if (signature === origSig) {
+        console.log(true, signature, origSig);
+    } else {
+        console.log(false, signature, origSig);
+    }
 })
 
 app.listen(process.env.PORT, () => {
