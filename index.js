@@ -9,7 +9,9 @@ const app = express();
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cors());
+app.use(cors({
+    credentials:true
+}));
 
 const str_to_sign = function str_to_sign(str) {
     if (typeof str !== 'string') {
@@ -37,7 +39,16 @@ app.post('/payment', (req, res) => {
         amount: amount,
         currency: 'UAH',
         description: description,
-        posterData: posterData,
+        rro_info: {
+            items: posterData.products.map(product => {
+                return {
+                    amount: product.count,
+                    price: 0,
+                    cost: 0,
+                    id: product.product_id
+                }
+            })
+        },
         public_key: process.env.LIQPAY_PUBLIC_KEY,
         private_key: process.env.LIQPAY_PRIVATE_KEY,
         server_url: 'https://poster-shop-server.onrender.com/payment/callback',
