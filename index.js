@@ -101,20 +101,33 @@ app.post('/payment/callback', (req, res) => {
         payment: {
             type: 1,
             sum: amount,
-            currency: 'UAH'
+            currency: "UAH"
         }
     }
 
     console.log(info, 'JSON', JSON.parse(info));
 
-    // axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, {
-    //     phone: ,
-    // })
-    // if (signature === origSig) {
-    //     console.log(true, signature, origSig);
-    // } else {
-    //     console.log(false, signature, origSig);
-    // }
+    if (signature === origSig) {
+        axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, {
+            ...orderParams
+        })
+            .then((data) => {
+                axios.post('https://www.liqpay.ua/api/request', {
+                    action: "hold_completion",
+                    version: "3",
+                    order_id: order_id
+                })
+            })
+            .catch((error) => {
+                axios.post('https://www.liqpay.ua/api/request', {
+                    action: "refund",
+                    version: "3",
+                    order_id: order_id
+                })
+            })
+    } else {
+        console.log(false, signature, origSig);
+    }
 })
 
 app.listen(process.env.PORT, () => {
