@@ -116,6 +116,7 @@ app.post('/payment/callback', (req, res) => {
         })
             .then((data) => {
                 console.log('addded')
+                console.log(data.data)
                 axios.post('https://www.liqpay.ua/api/request', {
                     action: "hold_completion",
                     version: "3",
