@@ -79,14 +79,34 @@ app.post('/payment/callback', (req, res) => {
     const signature = req.body.signature;
 
     const decodedData = Buffer.from(encodedData, 'base64').toString('utf-8');
+    const {payment_id, status, info, order_id, amount} = decodedData;
+    const action  = "hold_completion";
     console.log(decodedData);
 
-    // const origSig = str_to_sign(
-    //     process.env.LIQPAY_PRIVATE_KEY +
-    //     encodedData +
-    //     process.env.LIQPAY_PRIVATE_KEY,
-    // );
-    //
+    const origSig = str_to_sign(
+        process.env.LIQPAY_PRIVATE_KEY +
+        encodedData +
+        process.env.LIQPAY_PRIVATE_KEY,
+    );
+    // POSTER_API_KEY
+
+    const orderParams = {
+        phone: JSON.parse(info).phone,
+        products: JSON.parse(info).products,
+        first_name: JSON.parse(info).name,
+        comment: `Адрес доставки указаный при оплате: ${JSON.parse(info).shippingAddress}`,
+        payment: {
+            type: 1,
+            sum: amount,
+            currency: 'UAH'
+        }
+    }
+
+    console.log(orderParams);
+
+    // axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, {
+    //     phone: ,
+    // })
     // if (signature === origSig) {
     //     console.log(true, signature, origSig);
     // } else {
