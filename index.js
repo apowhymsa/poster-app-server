@@ -39,13 +39,17 @@ app.post('/payment', (req, res) => {
         amount: amount,
         currency: 'UAH',
         description: description,
-        info: JSON.stringify(
-            posterData.products.map(product => {
+        info: JSON.stringify({
+            products: posterData.products.map(product => {
                 return {
                     count: product.count,
                     id: product.product_id
                 }
-        })),
+            }),
+            phone: posterData.phone,
+            shippingAddress: posterData.shippingAddress,
+            name: posterData.name
+        }),
         public_key: process.env.LIQPAY_PUBLIC_KEY,
         private_key: process.env.LIQPAY_PRIVATE_KEY,
         server_url: 'https://poster-shop-server.onrender.com/payment/callback',
@@ -89,19 +93,19 @@ app.post('/payment/callback', (req, res) => {
     );
     // POSTER_API_KEY
 
-    // const orderParams = {
-    //     phone: JSON.parse(info).phone,
-    //     products: JSON.parse(info).products,
-    //     first_name: JSON.parse(info).name,
-    //     comment: `Адрес доставки указаный при оплате: ${JSON.parse(info).shippingAddress}`,
-    //     payment: {
-    //         type: 1,
-    //         sum: amount,
-    //         currency: 'UAH'
-    //     }
-    // }
+    const orderParams = {
+        phone: JSON.parse(info).phone,
+        products: JSON.parse(info).products,
+        first_name: JSON.parse(info).name,
+        comment: `Адрес доставки указаный при оплате: ${JSON.parse(info).shippingAddress}`,
+        payment: {
+            type: 1,
+            sum: amount,
+            currency: 'UAH'
+        }
+    }
 
-    console.log(info);
+    console.log(info, 'JSON', JSON.parse(info));
 
     // axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, {
     //     phone: ,
