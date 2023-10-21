@@ -39,16 +39,14 @@ app.post('/payment', (req, res) => {
         amount: amount,
         currency: 'UAH',
         description: description,
-        rro_info: {
+        info: JSON.stringify({
             items: posterData.products.map(product => {
                 return {
-                    amount: product.count,
-                    price: 0,
-                    cost: 0,
+                    count: product.count,
                     id: product.product_id
                 }
             })
-        },
+        }),
         public_key: process.env.LIQPAY_PUBLIC_KEY,
         private_key: process.env.LIQPAY_PRIVATE_KEY,
         server_url: 'https://poster-shop-server.onrender.com/payment/callback',
