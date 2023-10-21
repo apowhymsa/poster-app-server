@@ -108,29 +108,33 @@ app.post('/payment/callback', (req, res) => {
 
     console.log(orderParams);
 
-    // if (signature === origSig) {
-    //     axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, {
-    //         ...orderParams
-    //     })
-    //         .then((data) => {
-    //             console.log('addded')
-    //             // axios.post('https://www.liqpay.ua/api/request', {
-    //             //     action: "hold_completion",
-    //             //     version: "3",
-    //             //     order_id: order_id
-    //             // })
-    //         })
-    //         .catch((error) => {
-    //             console.log('error')
-    //             // axios.post('https://www.liqpay.ua/api/request', {
-    //             //     action: "refund",
-    //             //     version: "3",
-    //             //     order_id: order_id
-    //             // })
-    //         })
-    // } else {
-    //     console.log(false, signature, origSig);
-    // }
+    if (signature === origSig) {
+        axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, {
+            ...orderParams
+        }, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then((data) => {
+                console.log('addded')
+                axios.post('https://www.liqpay.ua/api/request', {
+                    action: "hold_completion",
+                    version: "3",
+                    order_id: order_id
+                })
+            })
+            .catch((error) => {
+                console.log('error')
+                axios.post('https://www.liqpay.ua/api/request', {
+                    action: "refund",
+                    version: "3",
+                    order_id: order_id
+                })
+            })
+    } else {
+        console.log(false, signature, origSig);
+    }
 })
 
 app.listen(process.env.PORT, () => {
