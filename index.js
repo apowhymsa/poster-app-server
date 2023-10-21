@@ -61,6 +61,6 @@ app.post('/payment/callback', (req, res) => {
     console.log('OK', req, res);
 })
 
-app.listen(6789, () => {
+app.listen(process.env.PORT, () => {
     console.log('server running')
 })
