@@ -78,7 +78,7 @@ app.post('/payment/callback', (req, res) => {
     const signature = req.body.signature;
 
     const decodedData = Buffer.from(encodedData, 'base64').toString('utf-8');
-    const {payment_id, status, info, order_id, amount} = decodedData;
+    const {payment_id, status, info, order_id, amount} = JSON.parse(decodedData);
     const action  = "hold_completion";
     console.log(decodedData);
 
