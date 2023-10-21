@@ -4,10 +4,12 @@ const crypto = require('crypto');
 const bodyParser = require('body-parser');
 const express = require('express');
 const {createHash} = require("crypto");
+const cors = require('cors');
 const app = express();
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cors());
 
 const str_to_sign = function str_to_sign(str) {
     if (typeof str !== 'string') {
@@ -28,13 +30,14 @@ app.post('/result', (req, res) => {
 })
 
 app.post('/payment', (req, res) => {
-    const {amount, currency, description} = req.body;
+    const {amount, description, posterData} = req.body;
 
     const params = {
-        action: 'pay',
+        action: 'hold',
         amount: amount,
-        currency: currency,
+        currency: 'UAH',
         description: description,
+        posterData: posterData,
         public_key: process.env.LIQPAY_PUBLIC_KEY,
         private_key: process.env.LIQPAY_PRIVATE_KEY,
         server_url: 'https://poster-shop-server.onrender.com/payment/callback',
@@ -54,7 +57,7 @@ app.post('/payment', (req, res) => {
     })
         .then(data => {
             const paymentURL = data.request.res.responseUrl;
-            res.status(200).send(paymentURL);
+            res.status(200).send({paymentURL: paymentURL});
         })
         .catch(error => res.status(404).send(JSON.stringify({
             errorCode: error.code,
@@ -65,17 +68,21 @@ app.post('/payment', (req, res) => {
 app.post('/payment/callback', (req, res) => {
     const encodedData = req.body.data;
     const signature = req.body.signature;
-    const origSig = str_to_sign(
-        process.env.LIQPAY_PRIVATE_KEY +
-        encodedData +
-        process.env.LIQPAY_PRIVATE_KEY,
-    );
 
-    if (signature === origSig) {
-        console.log(true, signature, origSig);
-    } else {
-        console.log(false, signature, origSig);
-    }
+    const decodedData = Buffer.from(encodedData, 'base64').toString('utf-8');
+    console.log(decodedData);
+
+    // const origSig = str_to_sign(
+    //     process.env.LIQPAY_PRIVATE_KEY +
+    //     encodedData +
+    //     process.env.LIQPAY_PRIVATE_KEY,
+    // );
+    //
+    // if (signature === origSig) {
+    //     console.log(true, signature, origSig);
+    // } else {
+    //     console.log(false, signature, origSig);
+    // }
 })
 
 app.listen(process.env.PORT, () => {
