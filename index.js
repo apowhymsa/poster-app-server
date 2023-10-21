@@ -43,7 +43,7 @@ app.post('/payment', (req, res) => {
             products: posterData.products.map(product => {
                 return {
                     count: product.count,
-                    id: product.product_id
+                    product_id: product.product_id
                 }
             }),
             phone: posterData.phone,
