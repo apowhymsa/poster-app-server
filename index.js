@@ -90,19 +90,19 @@ app.post('/payment/callback', (req, res) => {
     );
     // POSTER_API_KEY
 
-    const orderParams = {
-        phone: JSON.parse(info).phone,
-        products: JSON.parse(info).products,
-        first_name: JSON.parse(info).name,
-        comment: `Адрес доставки указаный при оплате: ${JSON.parse(info).shippingAddress}`,
-        payment: {
-            type: 1,
-            sum: amount,
-            currency: 'UAH'
-        }
-    }
+    // const orderParams = {
+    //     phone: JSON.parse(info).phone,
+    //     products: JSON.parse(info).products,
+    //     first_name: JSON.parse(info).name,
+    //     comment: `Адрес доставки указаный при оплате: ${JSON.parse(info).shippingAddress}`,
+    //     payment: {
+    //         type: 1,
+    //         sum: amount,
+    //         currency: 'UAH'
+    //     }
+    // }
 
-    console.log(orderParams);
+    console.log(JSON.parse(info));
 
     // axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, {
     //     phone: ,
