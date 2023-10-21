@@ -2,10 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "description": "poster-web-shop backend",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon index.js"
   },
   "author": "apowhymsa@gmail.com",
   "license": "ISC",
