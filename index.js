@@ -109,9 +109,7 @@ app.post('/payment/callback', (req, res) => {
     console.log(orderParams);
 
     if (signature === origSig) {
-        axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, {
-            ...orderParams
-        }, {
+        axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, orderParams, {
             headers: {
                 "Content-Type": "application/json"
             }
