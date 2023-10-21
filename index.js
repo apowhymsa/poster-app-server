@@ -112,18 +112,20 @@ app.post('/payment/callback', (req, res) => {
             ...orderParams
         })
             .then((data) => {
-                axios.post('https://www.liqpay.ua/api/request', {
-                    action: "hold_completion",
-                    version: "3",
-                    order_id: order_id
-                })
+                console.log('addded')
+                // axios.post('https://www.liqpay.ua/api/request', {
+                //     action: "hold_completion",
+                //     version: "3",
+                //     order_id: order_id
+                // })
             })
             .catch((error) => {
-                axios.post('https://www.liqpay.ua/api/request', {
-                    action: "refund",
-                    version: "3",
-                    order_id: order_id
-                })
+                console.log('error')
+                // axios.post('https://www.liqpay.ua/api/request', {
+                //     action: "refund",
+                //     version: "3",
+                //     order_id: order_id
+                // })
             })
     } else {
         console.log(false, signature, origSig);
