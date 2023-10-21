@@ -39,14 +39,13 @@ app.post('/payment', (req, res) => {
         amount: amount,
         currency: 'UAH',
         description: description,
-        info: JSON.stringify({
-            items: posterData.products.map(product => {
+        info: JSON.stringify(
+            posterData.products.map(product => {
                 return {
                     count: product.count,
                     id: product.product_id
                 }
-            })
-        }),
+        })),
         public_key: process.env.LIQPAY_PUBLIC_KEY,
         private_key: process.env.LIQPAY_PRIVATE_KEY,
         server_url: 'https://poster-shop-server.onrender.com/payment/callback',
@@ -102,7 +101,7 @@ app.post('/payment/callback', (req, res) => {
     //     }
     // }
 
-    console.log(JSON.parse(info));
+    console.log(info);
 
     // axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, {
     //     phone: ,
