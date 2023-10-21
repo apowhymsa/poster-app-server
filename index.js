@@ -110,6 +110,8 @@ app.post('/payment/callback', (req, res) => {
 
     if (signature === origSig) {
 
+        console.log(order_id);
+
         if (status === 'hold_wait') {
             axios.post(`https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`, orderParams, {
                 headers: {
