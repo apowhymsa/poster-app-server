@@ -71,8 +71,8 @@ app.post("/payment", (req, res) => {
         }),
         public_key: process.env.LIQPAY_PUBLIC_KEY,
         // private_key: process.env.LIQPAY_PRIVATE_KEY,
-        server_url: "https://f9p739-42889.csb.app/payment/callback",
-        result_url: "https://f9p739-42889.csb.app/result",
+        server_url: "https://poster-shop-server.onrender.com/payment/callback",
+        result_url: "https://poster-shop-server.onrender.com/result",
     };
 
     const data = Buffer.from(JSON.stringify(params)).toString("base64");
@@ -158,115 +158,6 @@ app.post("/payment/callback", async (req, res) => {
 
         return res.status(200).send("test send");
     }
-    //   const params = {
-    //     version: 3,
-    //     action: "hold_completion",
-    //     amount: Number(amount),
-    //     order_id: order_id,
-    //     public_key: process.env.LIQPAY_PUBLIC_KEY,
-    //   };
-
-    //   const data = Buffer.from(JSON.stringify(params)).toString("base64");
-    //   const signature = str_to_sign(
-    //     process.env.LIQPAY_PRIVATE_KEY + data + process.env.LIQPAY_PRIVATE_KEY,
-    //   );
-
-    //   console.log("data", data);
-
-    //   axios
-    //     .post("https://www.liqpay.ua/api/request", {
-    //       data: data,
-    //     })
-    //     .then((res) => console.log("data res", res.data))
-    //     .catch((err) => console.error("error", err));
-    // }
-    // // POSTER_API_KEY
-
-    // const orderParams = {
-    //   spot_id: 1,
-    //   phone: JSON.parse(info).phone,
-    //   products: JSON.parse(info).products,
-    //   first_name: JSON.parse(info).name,
-    //   comment: `Адрес доставки указаный при оплате: ${
-    //     JSON.parse(info).shippingAddress
-    //   }`,
-    //   payment: {
-    //     type: 1,
-    //     sum: amount,
-    //     currency: "UAH",
-    //   },
-    // };
-
-    // if (reqSignature === origSig) {
-    //   // console.log("order", order_id, "payment", payment_id);
-    // }
-    // // if (status === "hold_wait") {
-    // const params = {
-    //   action: "hold_completion",
-    //   amount: amount,
-    //   currency: "UAH",
-    //   description: description,
-    //   info: info,
-    //   order_id: order_id,
-    //   public_key: process.env.LIQPAY_PUBLIC_KEY,
-    //   private_key: process.env.LIQPAY_PRIVATE_KEY,
-    //   server_url: "https://f9p739-42889.csb.app/payment/callback",
-    //   result_url: "https://f9p739-42889.csb.app/result",
-    // };
-
-    // const data = Buffer.from(JSON.stringify(params)).toString("base64");
-    // const signature = str_to_sign(
-    //   process.env.LIQPAY_PRIVATE_KEY + data + process.env.LIQPAY_PRIVATE_KEY,
-    // );
-
-    // if (reqSignature === origSig && status === "hold_wait") {
-    //   console.log(data, signature);
-    // }
-
-    // // axios
-    // //   .post("https://f9p739-42889.csb.app/request", {
-    // //     data: data,
-    // //     signature: signature,
-    // //   })
-    // //   .then(() => console.log("changed"))
-    // //   .catch((err) => console.log(err));
-    // // }
-
-    // //   if (signature === origSig) {
-    // //     console.log(order_id);
-
-    // //     if (status === "hold_wait") {
-    // //       axios
-    // //         .post(
-    // //           `https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`,
-    // //           orderParams,
-    // //           {
-    // //             headers: {
-    // //               "Content-Type": "application/json",
-    // //             },
-    // //           },
-    // //         )
-    // //         .then((data) => {
-    // //           console.log("addded");
-    // //           console.log(data.data);
-    // //           axios.post("https://www.liqpay.ua/api/request", {
-    // //             action: "hold_completion",
-    // //             version: "3",
-    // //             order_id: order_id,
-    // //           });
-    // //         })
-    // //         .catch((error) => {
-    // //           console.log("error");
-    // //           axios.post("https://www.liqpay.ua/api/request", {
-    // //             action: "refund",
-    // //             version: "3",
-    // //             order_id: order_id,
-    // //           });
-    // //         });
-    // //     }
-    // //   } else {
-    // //     console.log(false, signature, origSig);
-    // //   }
 });
 
 app.listen(process.env.PORT, () => {
