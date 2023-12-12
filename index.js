@@ -51,7 +51,7 @@ app.post("/result", (req, res) => {
 });
 
 app.post("/payment", (req, res) => {
-    const { amount, description, posterData } = req.body;
+    const { amount, description, additionalData } = req.body;
 
     const params = {
         action: "pay",
@@ -59,15 +59,16 @@ app.post("/payment", (req, res) => {
         currency: "UAH",
         description: description,
         info: JSON.stringify({
-            products: posterData.products.map((product) => {
+            products: additionalData.products.map((product) => {
                 return {
                     count: product.count,
                     product_id: product.product_id,
+                    productVariant: product.productVariant
                 };
             }),
-            phone: posterData.phone,
-            shippingAddress: posterData.shippingAddress,
-            name: posterData.name,
+            phone: additionalData.phone,
+            shippingAddress: additionalData.shippingAddress,
+            name: additionalData.name,
         }),
         public_key: process.env.LIQPAY_PUBLIC_KEY,
         // private_key: process.env.LIQPAY_PRIVATE_KEY,
@@ -124,37 +125,38 @@ app.post("/payment/callback", async (req, res) => {
 
     if (reqSignature === origSig && status === "success") {
         console.log("dec", decodedData);
+        console.log('PAYMENT SUCCESS!!!');
 
-        const orderParams = {
-            spot_id: 1,
-            phone: JSON.parse(info).phone,
-            products: JSON.parse(info).products,
-            first_name: JSON.parse(info).name,
-            comment: `Адрес доставки указаный при оплате: ${
-                JSON.parse(info).shippingAddress
-            }`,
-            payment: {
-                type: 1,
-                sum: amount * 100,
-                currency: "UAH",
-            },
-        };
+        // const orderParams = {
+        //     spot_id: 1,
+        //     phone: JSON.parse(info).phone,
+        //     products: JSON.parse(info).products,
+        //     first_name: JSON.parse(info).name,
+        //     comment: `Адрес доставки указаный при оплате: ${
+        //         JSON.parse(info).shippingAddress
+        //     }`,
+        //     payment: {
+        //         type: 1,
+        //         sum: amount * 100,
+        //         currency: "UAH",
+        //     },
+        // };
 
-        console.log(orderParams);
-        await axios
-            .post(
-                `https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`,
-                {
-                    ...orderParams,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                },
-            )
-            .then((res) => console.log("added", res.data))
-            .catch((err) => console.error("err", err));
+        // console.log(orderParams);
+        // await axios
+        //     .post(
+        //         `https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`,
+        //         {
+        //             ...orderParams,
+        //         },
+        //         {
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //             },
+        //         },
+        //     )
+        //     .then((res) => console.log("added", res.data))
+        //     .catch((err) => console.error("err", err));
 
         return res.status(200).send("test send");
     }
