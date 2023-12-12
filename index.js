@@ -53,6 +53,8 @@ app.post("/result", (req, res) => {
 app.post("/payment", (req, res) => {
     const { amount, description, additionalData } = req.body;
 
+    console.log(additionalData);
+    
     const params = {
         action: "pay",
         amount: amount,
