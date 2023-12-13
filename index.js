@@ -54,7 +54,7 @@ app.post("/payment", (req, res) => {
     const { amount, description, additionalData } = req.body;
 
     console.log(additionalData);
-    
+
     const params = {
         action: "pay",
         amount: amount,
@@ -129,22 +129,19 @@ app.post("/payment/callback", async (req, res) => {
         console.log("dec", decodedData);
         console.log('PAYMENT SUCCESS!!!');
 
-        // const orderParams = {
-        //     spot_id: 1,
-        //     phone: JSON.parse(info).phone,
-        //     products: JSON.parse(info).products,
-        //     first_name: JSON.parse(info).name,
-        //     comment: `Адрес доставки указаный при оплате: ${
-        //         JSON.parse(info).shippingAddress
-        //     }`,
-        //     payment: {
-        //         type: 1,
-        //         sum: amount * 100,
-        //         currency: "UAH",
-        //     },
-        // };
+        const orderParams = {
+            phoneNumber: JSON.parse(info).phone,
+            products: JSON.parse(info).products,
+            userFullName: JSON.parse(info).name,
+            shippingAddress: JSON.parse(info).shippingAddress,
+            description: description,
+            payment: {
+                status: status === "success",
+                amount: amount
+            },
+        };
 
-        // console.log(orderParams);
+        console.log(orderParams);
         // await axios
         //     .post(
         //         `https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`,
