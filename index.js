@@ -141,21 +141,23 @@ app.post("/payment/callback", async (req, res) => {
             },
         };
 
+        const requestConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true
+        }
+
         console.log(orderParams);
-        // await axios
-        //     .post(
-        //         `https://joinposter.com/api/incomingOrders.createIncomingOrder?token=${process.env.POSTER_API_KEY}`,
-        //         {
-        //             ...orderParams,
-        //         },
-        //         {
-        //             headers: {
-        //                 "Content-Type": "application/json",
-        //             },
-        //         },
-        //     )
-        //     .then((res) => console.log("added", res.data))
-        //     .catch((err) => console.error("err", err));
+
+        try {
+            const response = await axios.put(`${process.env.BACKEND_URL}/order`, orderParams, requestConfig);
+
+            console.log('added', response.data);
+        } catch (error) {
+            console.log(error);
+            return res.sendStatus(500);
+        }
 
         return res.status(200).send("test send");
     }
